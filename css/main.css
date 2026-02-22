@@ -1,0 +1,37 @@
+.device-list__control-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 0 12px;
+    margin-bottom: 24px;
+}
+
+.devices-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4rem;
+    padding: 20px 10px !important;
+    font-size: 1rem !important;
+    img {
+        height: 100%;
+        width: auto;
+    }
+}
+
+.card-body {
+    padding: 0 !important   ;
+}
+
+.form-switch.list-group-item {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}

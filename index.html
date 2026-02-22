@@ -7,24 +7,61 @@
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <main id="app">
-      <header class="header">
-        <form class="device-list__control-btns hidden">
-          <select id="device-type-select">
+    <main id="app" class="container my-4">
+      <header class="header mb-3">
+        <form class="device-list__control-btns row hidden">
+          <select
+            class="form-select col"
+            aria-label="Device Type"
+            id="device-type-select"
+          >
             <option value="light">Light</option>
             <option value="thermostat">Thermostat</option>
             <option value="camera">Camera</option>
           </select>
+          <select class="form-select col" id="room-select">
+            <option value="bedroom">Bedroom</option>
+            <option value="kitchen">Kitchen</option>
+            <option value="living-room">Living Room</option>
+            <option value="bathroom">Bathroom</option>
+          </select>
           <input
             type="text"
             id="device-name-input"
+            class="form-control col"
             placeholder="Device Name"
             required
           />
-          <button type="submit" id="save-device-btn">Save</button>
+          <button
+            type="submit"
+            id="save-device-btn"
+            class="btn btn-primary col"
+          >
+            Save
+          </button>
         </form>
-        <button id="add-btn">Add Device</button>
+        <button id="add-btn" class="btn btn-success">Add Device</button>
       </header>
+      <section class="bedroom-devices">
+        <h2>Bedroom</h2>
+        <div class="grid"></div>
+      </section>
+      <section class="kitchen-devices">
+        <h2>Kitchen</h2>
+        <div class="grid"></div>
+      </section>
+      <section class="living-room-devices">
+        <h2>Living Room</h2>
+        <div class="grid"></div>
+      </section>
+      <section class="bathroom-devices">
+        <h2>Bathroom</h2>
+        <div class="grid"></div>
+      </section>
+      <div
+        id="devices-container"
+        class="devices-container grid text-center"
+      ></div>
     </main>
     <script type="module" src="js/main.js"></script>
   </body>
