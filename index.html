@@ -3,60 +3,97 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Home</title>
+    <title>DreamHouse</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <script
+      src="https://kit.fontawesome.com/e1af4116ac.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <main id="app" class="container my-4">
+    <main id="app" class="main">
       <header class="header mb-3">
+        <h1 class="header__title">
+          <i class="fa-solid fa-house"></i>DreamHouse
+        </h1>
         <form class="device-list__control-btns row hidden">
-          <select
-            class="form-select col"
-            aria-label="Device Type"
-            id="device-type-select"
-          >
-            <option value="light">Light</option>
-            <option value="thermostat">Thermostat</option>
-            <option value="camera">Camera</option>
-          </select>
-          <select class="form-select col" id="room-select">
-            <option value="bedroom">Bedroom</option>
-            <option value="kitchen">Kitchen</option>
-            <option value="living-room">Living Room</option>
-            <option value="bathroom">Bathroom</option>
-          </select>
+          <div class="custom-select" data-id="device-type-select">
+            <div class="custom-select__trigger">
+              <span>Light</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <ul class="custom-select__dropdown">
+              <li data-value="light" class="selected">Light</li>
+              <li data-value="camera">Camera</li>
+              <li data-value="socket">Socket</li>
+              <li data-value="blinds">Blinds</li>
+              <li data-value="lock">Lock</li>
+              <li data-value="speaker">Speaker</li>
+              <li data-value="tv">TV</li>
+              <li data-value="fan">Fan</li>
+              <li data-value="sensor">Sensor</li>
+            </ul>
+          </div>
+          <div class="custom-select" data-id="room-select">
+            <div class="custom-select__trigger">
+              <span>Bedroom</span>
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <ul class="custom-select__dropdown">
+              <li data-value="bedroom" class="selected">Bedroom</li>
+              <li data-value="kitchen">Kitchen</li>
+              <li data-value="living-room">Living Room</li>
+              <li data-value="bathroom">Bathroom</li>
+            </ul>
+          </div>
           <input
             type="text"
             id="device-name-input"
-            class="form-control col"
+            class="device-name__input"
             placeholder="Device Name"
             required
           />
-          <button
-            type="submit"
-            id="save-device-btn"
-            class="btn btn-primary col"
-          >
+          <button type="submit" id="save-device-btn" class="save-device-btn">
             Save
           </button>
         </form>
-        <button id="add-btn" class="btn btn-success">Add Device</button>
       </header>
-      <section class="bedroom-devices">
-        <h2>Bedroom</h2>
-        <div class="grid"></div>
+      <section class="bedroom-devices room">
+        <div class="room-info__container">
+          <h2 class="room-info__header">
+            <i class="fa-solid fa-bed"></i>Bedroom
+          </h2>
+          <p class="room-info__info"></p>
+        </div>
+        <div class="devices-container"></div>
       </section>
-      <section class="kitchen-devices">
-        <h2>Kitchen</h2>
-        <div class="grid"></div>
+      <section class="kitchen-devices room">
+        <div class="room-info__container">
+          <h2 class="room-info__header">
+            <i class="fa-solid fa-utensils"></i>Kitchen
+          </h2>
+          <p class="room-info__info"></p>
+        </div>
+        <div class="devices-container"></div>
       </section>
-      <section class="living-room-devices">
-        <h2>Living Room</h2>
-        <div class="grid"></div>
+      <section class="living-room-devices room">
+        <div class="room-info__container">
+          <h2 class="room-info__header">
+            <i class="fa-solid fa-tv"></i>Living Room
+          </h2>
+          <p class="room-info__info"></p>
+        </div>
+        <div class="devices-container"></div>
       </section>
-      <section class="bathroom-devices">
-        <h2>Bathroom</h2>
-        <div class="grid"></div>
+      <section class="bathroom-devices room">
+        <div class="room-info__container">
+          <h2 class="room-info__header">
+            <i class="fa-solid fa-bath"></i>Bathroom
+          </h2>
+          <p class="room-info__info"></p>
+        </div>
+        <div class="devices-container"></div>
       </section>
       <div
         id="devices-container"

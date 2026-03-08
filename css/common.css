@@ -1,6 +1,10 @@
+
 .hidden {
   display: none;
 }
 .visible {
   display: block;
+}
+:root {
+  --primary-grey: #586575;
 }

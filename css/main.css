@@ -1,37 +1,225 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  @media (max-width: 720px) {
+    display: none;
+  }
+}
+
+.header__title {
+  font-size: 2rem;
+  color: #404a55;
+  display: flex;
+  align-items:flex-start;
+  gap: 8px;
+}
+
 .device-list__control-btns {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    padding: 0 12px;
-    margin-bottom: 24px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 0 12px;
+  height: max-content;
+  @media (max-width: 720px) {
+    flex-direction: column;
+    padding: 0 8px;
+  }
 }
 
 .devices-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 4rem;
-    padding: 20px 10px !important;
-    font-size: 1rem !important;
-    img {
-        height: 100%;
-        width: auto;
-    }
+  display: flex;
+  justify-content: flex-start;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  img {
+    width: 32px;
+    height: 32px;
+  }
+  span {
+    font-size: 0.8rem;
+  }
 }
 
+.form-check {
+  width: 100%;
+  display: flex;
+  padding-left: 4px;
+  justify-content: flex-start;
+  gap: 22px;
+  align-items: center;
+  .toggle-text {
+    font-size: 0.8rem;
+    color: #c0c3d7;
+  }
+}
+.card {
+  @media (max-width: 720px) {
+    width: 100%;
+  }
+}
 .card-body {
-    padding: 0 !important   ;
+  min-height: 120px;
+  position: relative;
+  width: 16rem;
+  padding: 16px;
+  background-color: #30344c;
+  color: #c0c3d7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-weight: 400;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  max-width: 300px;
+  transition: 200ms ease-in-out;
+  @media (max-width: 720px) {
+    width: 100%;
+    flex: 1;
+    max-width: none;
+  }
 }
 
 .form-switch.list-group-item {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+
+.room {
+  background-color: #f0f1f3;
+  margin: 2rem 0;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 16px 16px 16px 16px;
+  border-radius: 8px;
+}
+
+.devices-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.room-info__container {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  @media (max-width: 720px) {
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-start;
+  }
+}
+
+.room-info__info {
+  background-color: #30344c;
+  color: #c0c3d7;
+  padding: 4px 12px;
+  display: flex;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  align-items: center;
+  gap: 1rem;
+  span {
     display: flex;
-    justify-content: center;
-    gap: 1rem;
     align-items: center;
+  }
+}
+
+.metric {
+  span {
+    margin-left: 6px;
+    font-size: 0.8rem;
+  }
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.card-title {
+  margin-bottom: 6px;
+}
+
+.card-title__container {
+  max-width: 170px;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+}
+
+.remove-btn,
+.delete-btn-container {
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.room-info__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  color: #404a55;
+}
+
+.brightness-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.power-usage-display {
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #aaa;
+}
+
+/* Слайдер горизонтальний — прибрати rotate(270deg) якщо хочеш горизонтальний вигляд */
+.brightness-control .slider .level {
+  transform: none; /* або залиш rotate(270deg) для вертикального */
+}
+
+.device-name__input {
+  border-radius: 8px;
+  min-height: 34px;
+  padding-left: 6px;
+  background-color: #30344c;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+.save-device-btn {
+  border-radius: 8px;
+  padding-left: 6px;
+  background-color: #0d8a2c;
+  color: #fff;
+  border: none;
+  min-height: 34px;
+  outline: none;
+  width: 80px;
+}
+.save-device-btn:disabled {
+  background-color: #0d8a2c80;
+  cursor: not-allowed;
 }
