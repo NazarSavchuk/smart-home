@@ -3,17 +3,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  @media (max-width: 720px) {
-    display: none;
-  }
 }
 
 .header__title {
   font-size: 2rem;
   color: #404a55;
   display: flex;
-  align-items:flex-start;
+  align-items: flex-start;
   gap: 8px;
+  @media (max-width: 720px) {
+    display: none;
+  }
 }
 
 .device-list__control-btns {
@@ -26,6 +26,7 @@
   @media (max-width: 720px) {
     flex-direction: column;
     padding: 0 8px;
+    width: 100%;
   }
 }
 
@@ -71,6 +72,7 @@
   min-height: 120px;
   position: relative;
   width: 16rem;
+  transition: opacity 0.3s ease;
   padding: 16px;
   background-color: #30344c;
   color: #c0c3d7;
@@ -195,9 +197,8 @@
   color: #aaa;
 }
 
-/* Слайдер горизонтальний — прибрати rotate(270deg) якщо хочеш горизонтальний вигляд */
 .brightness-control .slider .level {
-  transform: none; /* або залиш rotate(270deg) для вертикального */
+  transform: none;
 }
 
 .device-name__input {
@@ -222,4 +223,36 @@
 .save-device-btn:disabled {
   background-color: #0d8a2c80;
   cursor: not-allowed;
+}
+.light-settings {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-direction: row-reverse;
+}
+.form-range__container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-1px);
+  outline: none;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+.form-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  border-radius: 4px;
+  background: rgb(255 193 7);
+  height: 20px;
+}
+
+.form-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 18px;
+  background: #ffffff;
+  cursor: pointer;
 }

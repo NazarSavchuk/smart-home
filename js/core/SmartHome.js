@@ -65,7 +65,7 @@ export class SmartHome {
         room: "bedroom",
         isOn: false,
         uuid: "light123",
-        brightness: 100,
+        brightness: 0,
       },
       {
         name: "Fan",
@@ -73,7 +73,6 @@ export class SmartHome {
         room: "kitchen",
         isOn: false,
         uuid: "fan123",
-        brightness: 100,
       },
       {
         name: "Camera #1",
@@ -129,11 +128,10 @@ export class SmartHome {
     this.powerMap = {
       "floor-heating": 15,
       light: 10,
-      thermostat: 5,
       camera: 8,
       socket: 50,
-      blinds: 20,
-      lock: 3,
+      blinds: 0,
+      lock: 0,
       speaker: 15,
       tv: 80,
       fan: 35,
@@ -163,7 +161,7 @@ export class SmartHome {
 
     const powerUsage = activeDevices.reduce((sum, d) => {
       const base = this.powerMap[d.type] ?? 20;
-      // для light враховуємо brightness (0–100), за замовчуванням 100
+
       if (d.type === "light") {
         const brightness = d.brightness ?? 100;
         return sum + Math.round((base * brightness) / 100);
@@ -180,7 +178,7 @@ export class SmartHome {
     return {
       roomName: room.name,
       currentTemp: room.currentTemp,
-      powerUsage, // ← тепер правильне
+      powerUsage,
       activeDevices: activeDevices.length,
       totalDevices: roomDevices.length,
     };

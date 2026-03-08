@@ -105,12 +105,12 @@ class SmartHomeUI {
     const room = this.#roomSelect.value;
     const uuid = Math.random().toString(36).substring(2, 15);
 
-    this.#home.devices.push({ name, type, room, uuid, isOn: true });
-    this.#renderDevice(name, type, room, uuid, true);
+    this.#home.devices.push({ name, type, room, uuid, isOn: false });
+    this.#renderDevice(name, type, room, uuid, false);
     this.#updateRoomMetrics();
 
     this.#deviceName.value = "";
-    this.#updateSaveButtonState(); // ← після очищення кнопка стане disabled
+    this.#updateSaveButtonState();
   }
 
   #getRoomContainer(room) {
@@ -127,7 +127,7 @@ class SmartHomeUI {
     device.dataset.uuid = uuid;
 
     device.innerHTML = `
-      <div class="card-body">
+      <div class="card-body ${isOn ? "" : "opacity-50"}">
         <div class="card-header">
           <img src="img/${type}.svg" alt="${type}">
           <div class="card-title__container">
@@ -135,12 +135,13 @@ class SmartHomeUI {
             <span class="list-group-item">Type: ${type}</span>
           </div>
       </div>
-      <ul class="">
+      <ul class="${type === "light" ? "light-settings" : ""}">
+      ${type === "light" ? `<li class="form-range__container"><input type="range" min="0" max="100" value="0" class="form-range" id="brightness-${uuid}"></li>` : ""}
         <li class="list-group-item">
           <div class="form-check form-switch cntr">
             <input class="form-check-input toggle-switch hidden-xs-up" id="cbx-${uuid}" type="checkbox" role="switch" ${isOn ? "checked" : ""}>
             <label class="form-check-label toggle-label cbx" for="cbx-${uuid}"></label>
-            <span class="toggle-text">${isOn ? "Active" : "Inactive"}</span>
+            <span class="toggle-text ${type === "light" ? "hidden" : ""}">${isOn ? "Active" : "Inactive"}</span>
           </div>
         </li>
       </ul>
@@ -151,16 +152,43 @@ class SmartHomeUI {
              </div>`
           : ""
       }
+
       </div>
       
     `;
 
     const toggle = device.querySelector(".toggle-switch");
     const label = device.querySelector(".toggle-text");
+    const brightnessControl = device.querySelector(`#brightness-${uuid}`);
+
+    if (brightnessControl) {
+      brightnessControl.addEventListener("input", (e) => {
+        const brightness = e.target.value;
+        const homeDevice = this.#home.devices.find((d) => d.uuid === uuid); // ← перейменуй
+
+        if (brightness === "0") {
+          toggle.checked = false;
+          this.#toggleDeviceState(uuid, false);
+          device.querySelector(".card-body").classList.add("opacity-50");
+        } else {
+          toggle.checked = true;
+          this.#toggleDeviceState(uuid, true);
+          device.querySelector(".card-body").classList.remove("opacity-50");
+        }
+
+        if (homeDevice) homeDevice.brightness = brightness; // ← використай перейменовану
+      });
+    }
 
     toggle.addEventListener("change", (e) => {
-      label.textContent = e.target.checked ? "Active" : "Inactive";
       const isOn = e.target.checked;
+
+      label.textContent = e.target.checked ? "Active" : "Inactive";
+
+      device.querySelector(".card-body").classList.toggle("opacity-50", !isOn);
+      if (type === "light" && brightnessControl) {
+        brightnessControl.value = isOn ? "100" : "0";
+      }
       this.#toggleDeviceState(uuid, isOn);
       this.#updateRoomMetrics();
     });
