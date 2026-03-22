@@ -76,7 +76,7 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .room::before {
