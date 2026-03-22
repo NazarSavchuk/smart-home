@@ -99,3 +99,13 @@
   font-weight: 600;
   background: var(--accent-soft);
 }
+
+.custom-select[data-id="device-type-select"] .custom-select__dropdown {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.custom-select[data-id="device-type-select"] .custom-select__dropdown::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

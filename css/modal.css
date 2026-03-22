@@ -112,6 +112,11 @@
   padding: 20px 22px;
 }
 
+.modal-window,
+.settings-panel {
+  color-scheme: dark;
+}
+
 .settings-panel {
   display: flex;
   flex-direction: column;
@@ -135,14 +140,28 @@
 }
 
 .settings-select {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background-color: var(--surface-solid, #1c202c);
+  background-image: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 8px;
-  color: var(--text-primary, #e8eaf0);
-  padding: 5px 10px;
+  color: #f1f5f9;
+  padding: 8px 12px;
   font-size: 0.85rem;
   font-family: inherit;
   cursor: pointer;
+  min-height: 36px;
+}
+
+.settings-select option,
+.settings-select optgroup {
+  background-color: #1c202c;
+  color: #f1f5f9;
+}
+
+.settings-select:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
 }
 
 .settings-input {
