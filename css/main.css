@@ -98,6 +98,28 @@
   align-items: center;
 }
 
+.light-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.light-controls-row .form-check {
+  width: auto;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.light-controls-row .light-settings-btn-inline {
+  width: 100%;
+  margin: 0;
+  height: 24px;
+  margin-top: 2px;
+}
+
+
 .room {
   background-color: #f0f1f3;
   margin: 2rem 0;

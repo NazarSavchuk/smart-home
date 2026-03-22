@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DreamHouse</title>
     <link rel="stylesheet" href="css/styles.css" />
-    <script
-      src="https://kit.fontawesome.com/e1af4116ac.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/e1af4116ac.js" crossorigin="anonymous"></script>
     <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
   </head>
   <body>
@@ -40,66 +37,66 @@
               <span>Bedroom</span>
               <i class="fa-solid fa-chevron-down"></i>
             </div>
-            <ul class="custom-select__dropdown">
+            <ul class="custom-select__dropdown room-select__dropdown" id="room-select-dropdown">
               <li data-value="bedroom" class="selected">Bedroom</li>
               <li data-value="kitchen">Kitchen</li>
               <li data-value="living-room">Living Room</li>
               <li data-value="bathroom">Bathroom</li>
             </ul>
           </div>
-          <input
-            type="text"
-            id="device-name-input"
-            class="device-name__input"
-            placeholder="Device Name"
-            required
-          />
-          <button type="submit" id="save-device-btn" class="save-device-btn">
-            Add
-          </button>
+          <input type="text" id="device-name-input" class="device-name__input" placeholder="Device Name" required />
+          <button type="submit" id="save-device-btn" class="save-device-btn">Add</button>
         </form>
       </header>
+
       <section class="bedroom-devices room">
         <div class="room-info__container">
-          <h2 class="room-info__header">
-            <i class="fa-solid fa-bed"></i>Bedroom
-          </h2>
+          <h2 class="room-info__header"><i class="fa-solid fa-bed"></i>Bedroom</h2>
           <p class="room-info__info"></p>
         </div>
         <div class="devices-container"></div>
       </section>
+
       <section class="kitchen-devices room">
         <div class="room-info__container">
-          <h2 class="room-info__header">
-            <i class="fa-solid fa-utensils"></i>Kitchen
-          </h2>
+          <h2 class="room-info__header"><i class="fa-solid fa-utensils"></i>Kitchen</h2>
           <p class="room-info__info"></p>
         </div>
         <div class="devices-container"></div>
       </section>
+
       <section class="living-room-devices room">
         <div class="room-info__container">
-          <h2 class="room-info__header">
-            <i class="fa-solid fa-tv"></i>Living Room
-          </h2>
+          <h2 class="room-info__header"><i class="fa-solid fa-tv"></i>Living Room</h2>
           <p class="room-info__info"></p>
         </div>
         <div class="devices-container"></div>
       </section>
+
       <section class="bathroom-devices room">
         <div class="room-info__container">
-          <h2 class="room-info__header">
-            <i class="fa-solid fa-bath"></i>Bathroom
-          </h2>
+          <h2 class="room-info__header"><i class="fa-solid fa-bath"></i>Bathroom</h2>
           <p class="room-info__info"></p>
         </div>
         <div class="devices-container"></div>
       </section>
-      <div
-        id="devices-container"
-        class="devices-container grid text-center"
-      ></div>
+
+      <div id="devices-container" class="devices-container grid text-center"></div>
     </main>
+
+    <!-- Device Settings Modal -->
+    <div id="device-modal" class="modal-overlay hidden">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="modal-title" class="modal-title">Device Settings</h3>
+          <button id="modal-close-btn" class="modal-close-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+      </div>
+    </div>
+
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

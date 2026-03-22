@@ -1,20 +1,26 @@
 import { SmartHome } from "./core/SmartHome.js";
 import { CustomSelect } from "./components/CustomSelect.js";
+import { Light } from "./models/Light.js";
+import { TV } from "./models/TV.js";
+import { Blinds } from "./models/Blinds.js";
+import { Camera } from "./models/Camera.js";
+import { saveDevicesToStorage, loadDevicesIntoHome } from "./services/deviceStorage.js";
+import { mountDeviceCard } from "./ui/deviceCard.js";
+import { buildSettingsPanelHtml, bindSettingsPanelEvents } from "./ui/settingsModal.js";
 
 class SmartHomeUI {
   #home;
-  #container;
   #saveDeviceButton;
   #controlButtons;
   #deviceType;
   #deviceName;
-  #devicesContainer;
   #roomSelect;
   #metricsInterval;
+  #modal;
+  #modalContent;
 
   constructor() {
     this.#home = new SmartHome();
-    this.#container = document.getElementById("app");
     this.#saveDeviceButton = document.getElementById("save-device-btn");
     this.#controlButtons = document.querySelector(".device-list__control-btns");
 
@@ -22,41 +28,47 @@ class SmartHomeUI {
     this.#deviceType = new CustomSelect(selectRoot);
 
     this.#deviceName = document.getElementById("device-name-input");
-    this.#devicesContainer = document.getElementById("devices-container");
 
     const roomSelectRoot = document.querySelector("[data-id='room-select']");
     this.#roomSelect = new CustomSelect(roomSelectRoot);
+
+    this.#modal = document.getElementById("device-modal");
+    this.#modalContent = document.getElementById("modal-body");
 
     this.#init();
   }
 
   #init() {
+    loadDevicesIntoHome(this.#home);
     this.#renderExistingDevices();
     this.#updateSaveButtonState();
     this.#bindEvents();
     this.#updateRoomMetrics();
-    this.#metricsInterval = setInterval(() => {
-      this.#updateRoomMetrics();
-    }, 3000);
+    this.#metricsInterval = setInterval(() => this.#updateRoomMetrics(), 3000);
+  }
+
+  #persist() {
+    saveDevicesToStorage(this.#home.devices);
+  }
+
+  #syncDevicePower(uuid, isOn) {
+    const device = this.#home.getDeviceByUuid(uuid);
+    if (device) {
+      device.isOn = isOn;
+      this.#persist();
+    }
   }
 
   #updateRoomMetrics() {
     const allMetrics = this.#home.getAllRoomMetrics();
-
     allMetrics.forEach((metrics) => {
       if (!metrics) return;
-
-      const roomId = this.#home.rooms.find(
-        (r) => r.name === metrics.roomName,
-      )?.id;
+      const roomId = this.#home.rooms.find((r) => r.name === metrics.roomName)?.id;
       if (!roomId) return;
-
       const section = document.querySelector(`.${roomId}-devices`);
       if (!section) return;
-
       const infoEl = section.querySelector(".room-info__info");
       if (!infoEl) return;
-
       infoEl.innerHTML = `
         <span class="metric">
           <img src="img/termometr.svg" alt="Temperature" class="metric-icon" />
@@ -67,28 +79,32 @@ class SmartHomeUI {
           <span>${metrics.powerUsage} W</span>
         </span>
         <span class="metric">
-          <i class="fa-solid fa-mobile-screen" style="color: rgb(116, 192, 252);"></i><span>${metrics.activeDevices}/${metrics.totalDevices} active </span>
+          <i class="fa-solid fa-mobile-screen" style="color: rgb(116, 192, 252);"></i>
+          <span>${metrics.activeDevices}/${metrics.totalDevices} active</span>
         </span>
       `;
     });
   }
 
   #renderExistingDevices() {
-    this.#home.devices.forEach(({ name, type, room, uuid, isOn }) => {
-      this.#renderDevice(name, type, room, uuid, isOn);
+    this.#home.devices.forEach((dev) => {
+      this.#renderDevice(dev.name, dev.type, dev.room, dev.uuid, dev.isOn, dev.brightness, dev.color, dev.mode);
     });
   }
 
   #bindEvents() {
-    this.#deviceName.addEventListener("input", () =>
-      this.#updateSaveButtonState(),
-    );
-
+    this.#deviceName.addEventListener("input", () => this.#updateSaveButtonState());
     this.#saveDeviceButton.addEventListener("click", (e) => {
       e.preventDefault();
       this.#toggleVisibility();
       this.#addDevice();
     });
+
+    this.#modal?.addEventListener("click", (e) => {
+      if (e.target === this.#modal) this.#closeModal();
+    });
+    document.getElementById("modal-close-btn")?.addEventListener("click", () => this.#closeModal());
+    window.addEventListener("beforeunload", () => this.#persist());
   }
 
   #toggleVisibility() {
@@ -105,12 +121,28 @@ class SmartHomeUI {
     const room = this.#roomSelect.value;
     const uuid = Math.random().toString(36).substring(2, 15);
 
-    this.#home.devices.push({ name, type, room, uuid, isOn: false });
-    this.#renderDevice(name, type, room, uuid, false);
-    this.#updateRoomMetrics();
+    let newDevice;
+    if (type === "light") {
+      newDevice = new Light(name);
+    } else if (type === "tv") {
+      newDevice = new TV(name);
+    } else if (type === "blinds") {
+      newDevice = new Blinds(name);
+    } else if (type === "camera") {
+      newDevice = new Camera(name);
+    } else {
+      newDevice = { name, type, room, uuid, isOn: false };
+    }
 
+    newDevice.uuid = uuid;
+    newDevice.room = room;
+
+    this.#home.devices.push(newDevice);
+    this.#renderDevice(name, type, room, uuid, false, newDevice.brightness, newDevice.color, newDevice.mode);
+    this.#updateRoomMetrics();
     this.#deviceName.value = "";
     this.#updateSaveButtonState();
+    this.#persist();
   }
 
   #getRoomContainer(room) {
@@ -118,102 +150,54 @@ class SmartHomeUI {
     return section?.querySelector(".devices-container") ?? null;
   }
 
-  #renderDevice(name, type, room, uuid, isOn = true) {
-    const roomContainer = this.#getRoomContainer(room);
-    if (!roomContainer) return;
-
-    const device = document.createElement("div");
-    device.classList.add("card", "g-col-4");
-    device.dataset.uuid = uuid;
-
-    device.innerHTML = `
-      <div class="card-body ${isOn ? "" : "opacity-50"}">
-        <div class="card-header">
-          <img src="img/${type}.svg" alt="${type}">
-          <div class="card-title__container">
-            <h5 class="card-title col fs-6">${name}</h5>
-            <span class="list-group-item">Type: ${type}</span>
-          </div>
-      </div>
-      <ul class="${type === "light" ? "light-settings" : ""}">
-      ${type === "light" ? `<li class="form-range__container"><input type="range" min="0" max="100" value="0" class="form-range" id="brightness-${uuid}"></li>` : ""}
-        <li class="list-group-item">
-          <div class="form-check form-switch cntr">
-            <input class="form-check-input toggle-switch hidden-xs-up" id="cbx-${uuid}" type="checkbox" role="switch" ${isOn ? "checked" : ""}>
-            <label class="form-check-label toggle-label cbx" for="cbx-${uuid}"></label>
-            <span class="toggle-text ${type === "light" ? "hidden" : ""}">${isOn ? "Active" : "Inactive"}</span>
-          </div>
-        </li>
-      </ul>
-      ${
-        type !== "floor-heating"
-          ? `<div class="delete-btn-container">
-               <button class="btn btn-danger remove-btn"><i class="fa-solid fa-trash-can" style="color: rgb(231, 237, 248);"></i></button>
-             </div>`
-          : ""
-      }
-
-      </div>
-      
-    `;
-
-    const toggle = device.querySelector(".toggle-switch");
-    const label = device.querySelector(".toggle-text");
-    const brightnessControl = device.querySelector(`#brightness-${uuid}`);
-
-    if (brightnessControl) {
-      brightnessControl.addEventListener("input", (e) => {
-        const brightness = e.target.value;
-        const homeDevice = this.#home.devices.find((d) => d.uuid === uuid); // ← перейменуй
-
-        if (brightness === "0") {
-          toggle.checked = false;
-          this.#toggleDeviceState(uuid, false);
-          device.querySelector(".card-body").classList.add("opacity-50");
-        } else {
-          toggle.checked = true;
-          this.#toggleDeviceState(uuid, true);
-          device.querySelector(".card-body").classList.remove("opacity-50");
-        }
-
-        if (homeDevice) homeDevice.brightness = brightness; // ← використай перейменовану
-      });
-    }
-
-    toggle.addEventListener("change", (e) => {
-      const isOn = e.target.checked;
-
-      label.textContent = e.target.checked ? "Active" : "Inactive";
-
-      device.querySelector(".card-body").classList.toggle("opacity-50", !isOn);
-      if (type === "light" && brightnessControl) {
-        brightnessControl.value = isOn ? "100" : "0";
-      }
-      this.#toggleDeviceState(uuid, isOn);
-      this.#updateRoomMetrics();
+  #renderDevice(name, type, room, uuid, isOn = false, brightness = 0, color = "#ffffff", mode = "normal") {
+    mountDeviceCard({
+      home: this.#home,
+      roomContainer: this.#getRoomContainer(room),
+      persist: () => this.#persist(),
+      updateMetrics: () => this.#updateRoomMetrics(),
+      openSettings: (u, t) => this.#openSettings(u, t),
+      syncDevicePower: (u, on) => this.#syncDevicePower(u, on),
+      removeDevice: (u, el) => this.#removeDevice(u, el),
+      name,
+      type,
+      room,
+      uuid,
+      isOn,
+      brightness,
+      color,
+      mode,
     });
-
-    if (type !== "floor-heating") {
-      device
-        .querySelector(".remove-btn")
-        .addEventListener("click", () => this.#removeDevice(uuid, device));
-    }
-
-    roomContainer.appendChild(device);
   }
 
-  #toggleDeviceState(uuid, isOn) {
-    const device = this.#home.devices.find((d) => d.uuid === uuid);
-    if (device) device.isOn = isOn;
+  #openSettings(uuid, type) {
+    const device = this.#home.getDeviceByUuid(uuid);
+    if (!device) return;
+
+    const html = buildSettingsPanelHtml(type, device);
+    document.getElementById("modal-title").textContent = `${device.name} — Settings`;
+    this.#modalContent.innerHTML = html;
+    this.#modal.classList.remove("hidden");
+    this.#modal.classList.add("visible");
+
+    bindSettingsPanelEvents(uuid, type, device, {
+      persist: () => this.#persist(),
+      updateMetrics: () => this.#updateRoomMetrics(),
+      syncDevicePower: (u, on) => this.#syncDevicePower(u, on),
+    });
+  }
+
+  #closeModal() {
+    this.#modal.classList.remove("visible");
+    this.#modal.classList.add("hidden");
   }
 
   #removeDevice(uuid, deviceEl) {
-    const confirmed = confirm("Are you sure you want to remove this device?");
-    if (!confirmed) return;
-
+    if (!confirm("Are you sure you want to remove this device?")) return;
     this.#home.devices = this.#home.devices.filter((d) => d.uuid !== uuid);
     deviceEl.remove();
     this.#updateRoomMetrics();
+    this.#persist();
   }
 }
 

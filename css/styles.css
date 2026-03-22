@@ -2,6 +2,7 @@
 @import url("main.css");
 @import url("checkbox.css");
 @import url("custom-select.css");
+@import url("modal.css");
 
 html,
 body {
@@ -39,4 +40,8 @@ main {
     rgba(240, 241, 243, 1) 0%,
     rgba(48, 52, 76, 1) 44%
   );
+}
+
+li::marker {
+  color: transparent;
 }
