@@ -1,16 +1,14 @@
-/* ============================================================
-   DEVICE SETTINGS MODAL
-   ============================================================ */
-
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(4px);
+  background: rgba(6, 8, 14, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
   transition: opacity 0.2s ease;
 }
 
@@ -29,32 +27,70 @@
 }
 
 .modal-window {
-  background: var(--card-bg, #1e2130);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  width: min(520px, 95vw);
-  max-height: 85vh;
+  position: relative;
+  background: linear-gradient(165deg, rgba(30, 36, 48, 0.98) 0%, var(--card-bg, #161b26) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg, 16px);
+  width: min(520px, 100%);
+  max-height: min(85vh, 720px);
   overflow-y: auto;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  overflow-x: hidden;
+  box-shadow:
+    var(--shadow-md, 0 24px 60px rgba(0, 0, 0, 0.55)),
+    0 0 0 1px rgba(56, 189, 248, 0.08),
+    0 0 80px rgba(56, 189, 248, 0.06);
+}
+
+.modal-window::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.45), rgba(167, 139, 250, 0.3), transparent 60%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.modal-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-window::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-window::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+}
+
+.modal-window::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 22px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border-subtle);
   position: sticky;
   top: 0;
-  background: var(--card-bg, #1e2130);
+  background: linear-gradient(180deg, rgba(22, 27, 38, 0.98) 0%, rgba(22, 27, 38, 0.92) 100%);
+  backdrop-filter: blur(8px);
   z-index: 1;
 }
 
 .modal-title {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   margin: 0;
-  color: var(--text-primary, #e8eaf0);
+  color: var(--text-primary, #f1f5f9);
+  letter-spacing: -0.02em;
 }
 
 .modal-close-btn {
@@ -75,10 +111,6 @@
 .modal-body {
   padding: 20px 22px;
 }
-
-/* ============================================================
-   SETTINGS PANEL — SHARED
-   ============================================================ */
 
 .settings-panel {
   display: flex;
@@ -109,6 +141,7 @@
   color: var(--text-primary, #e8eaf0);
   padding: 5px 10px;
   font-size: 0.85rem;
+  font-family: inherit;
   cursor: pointer;
 }
 
@@ -119,6 +152,7 @@
   color: var(--text-primary, #e8eaf0);
   padding: 5px 10px;
   font-size: 0.85rem;
+  font-family: inherit;
   flex: 1;
 }
 
@@ -135,7 +169,7 @@
 
 .settings-message {
   font-size: 0.8rem;
-  color: #74c0fc;
+  color: var(--accent, #38bdf8);
   min-height: 18px;
 }
 
@@ -154,17 +188,22 @@
 }
 
 .btn-action {
-  background: rgba(116, 192, 252, 0.15);
-  border: 1px solid rgba(116, 192, 252, 0.3);
-  color: #74c0fc;
-  border-radius: 8px;
-  padding: 6px 12px;
+  background: var(--accent-soft, rgba(56, 189, 248, 0.15));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: var(--accent, #38bdf8);
+  border-radius: var(--radius-sm, 8px);
+  padding: 8px 14px;
   font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.2s, transform 0.15s;
   white-space: nowrap;
 }
-.btn-action:hover { background: rgba(116, 192, 252, 0.28); }
+.btn-action:hover {
+  background: rgba(56, 189, 248, 0.25);
+  transform: translateY(-1px);
+}
 
 .full-width-btn {
   width: 100%;
@@ -172,7 +211,6 @@
   margin-top: 6px;
 }
 
-/* Toggle pill */
 .toggle-pill {
   position: relative;
   display: inline-block;
@@ -197,10 +235,12 @@
   border-radius: 50%;
   transition: transform 0.2s;
 }
-.toggle-pill input:checked + .pill-slider { background: #339af0; }
+.toggle-pill input:checked + .pill-slider {
+  background: linear-gradient(90deg, var(--accent, #38bdf8), var(--accent-2, #a78bfa));
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
 .toggle-pill input:checked + .pill-slider::before { transform: translateX(18px); }
 
-/* Badges */
 .badge {
   font-size: 0.72rem;
   font-weight: 700;
@@ -216,10 +256,6 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
 }
-
-/* ============================================================
-   TV PANEL
-   ============================================================ */
 
 .channel-controls {
   display: flex;
@@ -273,12 +309,11 @@
   transition: background 0.12s;
 }
 .ch-item:hover { background: rgba(255,255,255,0.06); }
-.ch-item.active-ch { background: rgba(116,192,252,0.15); color: #74c0fc; }
+.ch-item.active-ch {
+  background: var(--accent-soft, rgba(56, 189, 248, 0.15));
+  color: var(--accent, #38bdf8);
+}
 .ch-num { font-size: 0.7rem; color: var(--text-muted, #8a8fa8); min-width: 24px; }
-
-/* ============================================================
-   BLINDS PANEL
-   ============================================================ */
 
 .blinds-presets {
   display: flex;
@@ -316,14 +351,10 @@
 
 .slat {
   width: 100%;
-  background: linear-gradient(90deg, #74c0fc 0%, #a5d8ff 100%);
+  background: linear-gradient(90deg, var(--accent, #38bdf8) 0%, var(--accent-2, #a78bfa) 100%);
   border-radius: 2px;
   transition: height 0.3s, opacity 0.3s;
 }
-
-/* ============================================================
-   LIGHT PANEL
-   ============================================================ */
 
 .light-preview {
   width: 100%;
@@ -353,9 +384,9 @@
 }
 .mode-btn:hover { background: rgba(255,255,255,0.12); }
 .mode-btn.active-mode {
-  background: rgba(116,192,252,0.18);
-  border-color: rgba(116,192,252,0.4);
-  color: #74c0fc;
+  background: var(--accent-soft, rgba(56, 189, 248, 0.2));
+  border-color: rgba(56, 189, 248, 0.45);
+  color: var(--accent, #38bdf8);
 }
 
 .color-picker {
@@ -368,44 +399,9 @@
   padding: 2px;
 }
 
-/* ============================================================
-   CAMERA PANEL
-   ============================================================ */
-
 .recording-dot { font-size: 0.6em; }
 .rec-active { color: #ff6b6b; animation: pulse-badge 0.8s infinite; }
 
-/* ============================================================
-   SETTINGS BUTTON ON CARDS
-   ============================================================ */
-
-.settings-btn-item {
-  padding-top: 8px !important;
-  margin-top: 2px;
-}
-
-.btn-settings {
-  width: 100%;
-  background: rgba(116,192,252,0.1);
-  border: 1px solid rgba(116,192,252,0.25);
-  color: #74c0fc;
-  border-radius: 4px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.btn-settings:hover {
-  background: rgba(116,192,252,0.22);
-}
-
-/* ============================================================
-   BLINDS RANGE LABEL
-   ============================================================ */
 .blinds-range-wrap {
   display: flex;
   flex-direction: column;

@@ -5,9 +5,6 @@ import { Camera } from "../models/Camera.js";
 
 export const DEVICE_STORAGE_KEY = "dreamhouse_devices_v1";
 
-/**
- * @param {unknown[]} devices
- */
 export function saveDevicesToStorage(devices) {
   try {
     const serialized = devices.map((device) => {
@@ -54,9 +51,6 @@ export function saveDevicesToStorage(devices) {
   } catch (_) {}
 }
 
-/**
- * @returns {unknown[] | null}
- */
 export function readStoredDeviceSnapshots() {
   try {
     const raw = localStorage.getItem(DEVICE_STORAGE_KEY);
@@ -68,9 +62,6 @@ export function readStoredDeviceSnapshots() {
   }
 }
 
-/**
- * @param {unknown} snapshot
- */
 export function restoreDeviceFromSnapshot(snapshot) {
   if (!snapshot || typeof snapshot !== "object") return null;
 
@@ -166,7 +157,6 @@ export function restoreDeviceFromSnapshot(snapshot) {
   return restored;
 }
 
-/** @param {{ devices: unknown[] }} home */
 export function loadDevicesIntoHome(home) {
   const snapshots = readStoredDeviceSnapshots();
   if (!snapshots) return;

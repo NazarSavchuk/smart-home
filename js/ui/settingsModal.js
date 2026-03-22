@@ -1,11 +1,3 @@
-/**
- * @typedef {object} SettingsModalCallbacks
- * @property {() => void} persist
- * @property {() => void} updateMetrics
- * @property {(uuid: string, isOn: boolean) => void} syncDevicePower
- */
-
-/** @param {import("../models/TV.js").TV} tv */
 export function buildTVPanel(tv) {
   const info = tv.getInfo ? tv.getInfo() : {};
   const channels = tv.channels ?? [];
@@ -75,7 +67,6 @@ export function buildTVPanel(tv) {
     `;
 }
 
-/** @param {import("../models/Blinds.js").Blinds} blinds */
 export function buildBlindsPanel(blinds) {
   const info = blinds.getInfo ? blinds.getInfo() : {};
   return `
@@ -103,7 +94,6 @@ export function buildBlindsPanel(blinds) {
     `;
 }
 
-/** @param {import("../models/Camera.js").Camera} camera */
 export function buildCameraPanel(camera) {
   const info = camera.getInfo ? camera.getInfo() : {};
   return `
@@ -146,7 +136,6 @@ export function buildCameraPanel(camera) {
     `;
 }
 
-/** @param {import("../models/Light.js").Light} light */
 export function buildLightPanel(light) {
   const info = light.getInfo ? light.getInfo() : {};
   return `
@@ -178,10 +167,6 @@ export function buildLightPanel(light) {
     `;
 }
 
-/**
- * @param {string} type
- * @param {object} device
- */
 export function buildSettingsPanelHtml(type, device) {
   if (type === "tv") return buildTVPanel(device);
   if (type === "blinds") return buildBlindsPanel(device);
@@ -190,12 +175,6 @@ export function buildSettingsPanelHtml(type, device) {
   return "";
 }
 
-/**
- * @param {string} uuid
- * @param {string} type
- * @param {object} device
- * @param {SettingsModalCallbacks} cb
- */
 export function bindSettingsPanelEvents(uuid, type, device, cb) {
   if (type === "tv") bindTVEvents(uuid, device, cb);
   else if (type === "blinds") bindBlindsEvents(uuid, device, cb);
@@ -203,11 +182,6 @@ export function bindSettingsPanelEvents(uuid, type, device, cb) {
   else if (type === "light") bindLightModalEvents(uuid, device, cb);
 }
 
-/**
- * @param {string} uuid
- * @param {import("../models/TV.js").TV} tv
- * @param {SettingsModalCallbacks} cb
- */
 function bindTVEvents(uuid, tv, cb) {
   const volSlider = document.getElementById("tv-volume");
   const volVal = document.getElementById("tv-vol-val");
@@ -319,11 +293,6 @@ function bindTVEvents(uuid, tv, cb) {
   cb.updateMetrics();
 }
 
-/**
- * @param {string} uuid
- * @param {import("../models/Blinds.js").Blinds} blinds
- * @param {SettingsModalCallbacks} cb
- */
 function bindBlindsEvents(uuid, blinds, cb) {
   const posSlider = document.getElementById("blinds-pos-modal");
   const posVal = document.getElementById("blinds-pos-val");
@@ -377,11 +346,6 @@ function bindBlindsEvents(uuid, blinds, cb) {
   cb.updateMetrics();
 }
 
-/**
- * @param {string} uuid
- * @param {import("../models/Camera.js").Camera} camera
- * @param {SettingsModalCallbacks} cb
- */
 function bindCameraEvents(uuid, camera, cb) {
   const modeSelect = document.getElementById("camera-mode-select");
   const resSelect = document.getElementById("camera-res-select");
@@ -428,11 +392,6 @@ function bindCameraEvents(uuid, camera, cb) {
   });
 }
 
-/**
- * @param {string} uuid
- * @param {import("../models/Light.js").Light} light
- * @param {SettingsModalCallbacks} cb
- */
 function bindLightModalEvents(uuid, light, cb) {
   const brSlider = document.getElementById("light-brightness-modal");
   const brVal = document.getElementById("light-br-val");

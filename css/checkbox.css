@@ -1,13 +1,14 @@
 .cbx {
   position: relative;
   top: 1px;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #c8ccd4;
-  border-radius: 3px;
-  transition: background 0.1s ease;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(148, 163, 184, 0.45);
+  border-radius: 6px;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
   display: block;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .cbx:after {
@@ -21,8 +22,8 @@
   transform: rotate(45deg) scale(0);
   border-right: 2px solid #fff;
   border-bottom: 2px solid #fff;
-  transition: all 0.3s ease;
-  transition-delay: 0.15s;
+  transition: all 0.25s ease;
+  transition-delay: 0.05s;
 }
 
 .lbl {
@@ -34,8 +35,9 @@
 .toggle-switch:checked ~ .cbx,
 input[type="checkbox"]:checked ~ .cbx {
   border-color: transparent;
-  background: #6871f1;
-  animation: jelly 0.6s ease;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  animation: jelly 0.55s ease;
 }
 
 .toggle-switch:checked ~ .cbx:after,
@@ -52,27 +54,21 @@ input[type="checkbox"]:checked ~ .cbx:after {
   from {
     transform: scale(1, 1);
   }
-
   30% {
-    transform: scale(1.25, 0.75);
-  }
-
-  40% {
-    transform: scale(0.75, 1.25);
-  }
-
-  50% {
     transform: scale(1.15, 0.85);
   }
-
+  40% {
+    transform: scale(0.9, 1.1);
+  }
+  50% {
+    transform: scale(1.08, 0.92);
+  }
   65% {
-    transform: scale(0.95, 1.05);
+    transform: scale(0.97, 1.03);
   }
-
   75% {
-    transform: scale(1.05, 0.95);
+    transform: scale(1.02, 0.98);
   }
-
   to {
     transform: scale(1, 1);
   }

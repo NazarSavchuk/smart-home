@@ -1,13 +1,3 @@
-/**
- * @param {object} params
- * @param {import("../core/SmartHome.js").SmartHome} params.home
- * @param {HTMLElement} params.roomContainer
- * @param {() => void} params.persist
- * @param {() => void} params.updateMetrics
- * @param {(uuid: string, type: string) => void} params.openSettings
- * @param {(uuid: string, isOn: boolean) => void} params.syncDevicePower
- * @param {(uuid: string, el: HTMLElement) => void} params.removeDevice
- */
 export function mountDeviceCard({
   home,
   roomContainer,
